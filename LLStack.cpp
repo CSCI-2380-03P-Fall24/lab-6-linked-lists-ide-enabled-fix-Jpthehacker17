@@ -1,4 +1,6 @@
 #include "LLStack.h"
+#include <iostream>
+using namespace std;
 
 // Node constructor: initialize new nodes with an input string s
 	// s should be stored as the data of the node
@@ -6,6 +8,8 @@
 	// so be sure that the "next" Node is linked to a nullptr
 Node::Node(string s) 
 {
+	data = s;
+	next = nullptr;
 
 }
 
@@ -14,6 +18,9 @@ Node::Node(string s)
 	// the head and tail should both be initialized as null pointers
 LLStack::LLStack()
 {
+	head = nullptr;
+	tail = nullptr;
+	count = 0;
 
 }
 
@@ -24,7 +31,16 @@ LLStack::LLStack()
 */
 string LLStack::top()
 {
-	return "fixthis";
+	
+	if(head != nullptr)
+	{
+		return head->data;
+	}
+	else
+	{
+		return "";
+	}
+	
 }
 
 /*
@@ -32,7 +48,7 @@ string LLStack::top()
 */
 int LLStack::size()
 {
-	return -1;
+	return count;
 }
 
 /*
@@ -45,7 +61,18 @@ int LLStack::size()
 */
 void LLStack::push(string s)
 {
-
+	Node* newNode = new Node(s);
+	if(head == nullptr)
+	{
+		head = newNode;
+		tail = newNode;
+	}
+	else
+	{
+		newNode -> next = head;
+		head = newNode;
+	}
+	count++;
 }
 
 /*
@@ -57,7 +84,22 @@ void LLStack::push(string s)
 */
 void LLStack::pop()
 {
+	if(head != nullptr)
+	{
+		Node* temp = head;
+		head = head -> next;
+		delete temp;
+		count--;
 
+		if(head == nullptr)
+		{
+			tail = nullptr;
+		}
+		
+
+	}
+	
+	
 }
 
 /*
@@ -82,6 +124,50 @@ void LLStack::pop()
 */
 int LLStack::removeAll(const string& target) 
 {
-	return -1;
+	int removedNodes = 0;
+
+	while(head != nullptr && head->data == target)
+	{		
+		Node* temp = head;
+		head = head -> next;
+		delete temp;
+		count--;
+
+		removedNodes++;
+	}
+
+
+	if(head != nullptr)
+	{
+		Node* curr = head;
+
+		while(curr->next != nullptr)
+		{
+
+			if(curr->next->data == target)
+			{
+				Node* temp = curr->next;
+				curr->next = curr -> next-> next;
+				delete temp;
+				count--;
+
+				removedNodes++;
+				
+			}
+			else
+			{
+				curr = curr -> next;
+			}	
+			
+		}
+		curr = nullptr;
+	}
+	else
+	{
+		tail = nullptr;
+	}
+	
+	return removedNodes;
+
 }
 
